@@ -66,7 +66,7 @@ function init() {
 	context = canvas.getContext('2d');
 	bottom = canvas.height - 1;
 	img = new Image();
-	img.src = "ryan.gif";
+	img.src = 'assets/ryan.gif';
 	img.onload = function () {
 		setInterval(run, 10);
 
