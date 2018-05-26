@@ -113,33 +113,6 @@ function render(target, index) {
     context.clearRect(0, 0, canvas.width, canvas.height);
   }
 
-  // var temp = document.querySelector('#temp');
-  // temp.width = imgw * nowPositions[index].o;
-  // temp.height = imgh * nowPositions[index].o;
-  // tempCtx = temp.getContext('2d');
-  // tempCtx.putImageData(imgsData[index], 0, 0);
-
-  // var scaleCanvas = document.querySelector('#scale');
-  // scaleCanvas.width = imgw * initPositions[index].o;
-  // scaleCanvas.height = imgh * initPositions[index].o;
-  // scaleCtx = scaleCanvas.getContext('2d');
-  // scaleCtx.scale(scale, scale);
-  // scaleCtx.drawImage(temp, 0, 0);
-
-  // var scaleDone = scaleCtx.getImageData(
-  //   nowPositions[index].x,
-  //   nowPositions[index].y,
-  //   imgw * nowPositions[index].o,
-  //   imgh * nowPositions[index].o
-  // );
-
-  // console.log(1);
-
-  // nowPositions[index].x = initPositions[index].x;
-  // nowPositions[index].y = initPositions[index].y;
-  // nowPositions[index].o = initPositions[index].o;
-  // imgsData[index] = scaleDone;
-
   context.putImageData(
     imgsData[index],
     initPositions[index].x,

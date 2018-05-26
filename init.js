@@ -5,7 +5,7 @@ const path = require('path')
 const copyList = [
   {
     from: path.resolve(__dirname, './node_modules/@tweenjs/tween.js/src/Tween.js'),
-    to: 'assets/js/'
+    to: 'lib/js/'
   },
 ]
 
