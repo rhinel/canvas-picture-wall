@@ -12,10 +12,13 @@ var imgw = 7;
 var imgh = 7;
 var allw = 319 - imgw;
 var allh = 343 - imgh;
+var randomX = 0;
+var randomY = 0;
 
 bgw = bgw - imgw;
 bgh = bgh - imgh;
 
+// var scale = 1;
 var scale = (bgw > bgh ? (bgh / allh) : (bgw / allw)) * (allw / allh);
 
 // fix 边缘区域
@@ -53,8 +56,8 @@ window.onload = function () {
 function draw() {
   for (var initPosition = 0; initPosition < logoPositionTable.length; initPosition++) {
     var initPositionItem = {
-      x: Math.random() * allw * scale + ((bgw - (allw * scale)) / 2),
-      y: Math.random() * allh * scale + ((bgh - (allh * scale)) / 2),
+      x: Math.random() * allw * scale + ((bgw - (allw * scale)) / 2) + randomX,
+      y: Math.random() * allh * scale + ((bgh - (allh * scale)) / 2) + randomY,
       o: scale
     };
 
