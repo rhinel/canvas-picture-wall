@@ -47,16 +47,13 @@ for (var i = 0; i < h; i++) {
 			y: Math.random() * 600,
 			vx: 0,
 			vy: 0,
-			ax: .09 - Math.random() * .08,
+			ax: .16 - Math.random() * .08,
 			ay: .09 - Math.random() * .08,
 			nx: .4 + Math.random() * .3,
 			ny: .3 + Math.random() * .2
 		};
 	}
 }
-
-console.log(currentData);
-console.log(targetData);
 
 window.onload = init;
 window.onclick = onClick;
