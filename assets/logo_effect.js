@@ -1,31 +1,31 @@
+// 容器
 var canvas;
 var context;
+
+var temp;
+var tempCtx;
+
 var bgw = document.documentElement.clientWidth;
 var bgh = document.documentElement.clientHeight;
 
 // 图片参数
 var imgs = [];
 var imgsData = [];
-var imgsLength = 19;
 var imgsLoaded = 0;
-var imgw = 7;
-var imgh = 7;
-var allw = 319 - imgw;
-var allh = 343 - imgh;
-var randomX = 0;
-var randomY = 0;
+var imgsLength = 19;    // 获取的图片数量
+var imgw = 7;           // 图片最小宽度
+var imgh = 7;           // 图片最小高度
+var allw = 319;         // logo宽度
+var allh = 343;         // logo高度
+var randomX = 0;        // 初始随机左右偏移量
+var randomY = 0;        // 初始随机上下偏移量
+var imgScale = 3;       // 图片在页面缩放比基础上缩放倍数
 
-bgw = bgw - imgw;
-bgh = bgh - imgh;
-
-// var scale = 1;
+// 确定页面缩放比例，铺屏
 var scale = (bgw > bgh ? (bgh / allh) : (bgw / allw)) * (allw / allh);
-
-// fix 边缘区域
 
 // 图片位置数组
 var initPositions = [];
-var nowPositions = [];
 
 // 初始化图片数组
 window.onload = function () {
@@ -33,6 +33,11 @@ window.onload = function () {
   canvas.width = bgw;
   canvas.height = bgh;
   context = canvas.getContext('2d');
+
+  temp = document.querySelector('#temp');
+  temp.width = imgw * scale * imgScale;
+  temp.height = imgh * scale * imgScale;
+  tempCtx = temp.getContext('2d');
 
   for (var imgIndex = 1; imgIndex <= imgsLength; imgIndex++) {
     var imgSrc = new Image();
@@ -56,9 +61,9 @@ window.onload = function () {
 function draw() {
   for (var initPosition = 0; initPosition < logoPositionTable.length; initPosition++) {
     var initPositionItem = {
-      x: Math.random() * allw * scale + ((bgw - (allw * scale)) / 2) + randomX,
-      y: Math.random() * allh * scale + ((bgh - (allh * scale)) / 2) + randomY,
-      o: scale
+      x: Math.random() * allw * scale + ((bgw - (allw * scale / (allw / allh))) / 2) + randomX,
+      y: Math.random() * allh * scale + ((bgh - (allh * scale / (allw / allh))) / 2) + randomY,
+      o: scale * imgScale
     };
 
     initPositions.push(initPositionItem);
@@ -67,19 +72,36 @@ function draw() {
       imgs[parseInt(Math.random() * 19)],
       initPositionItem.x,
       initPositionItem.y,
-      imgw * scale,
-      imgh * scale
+      imgw * scale * imgScale,
+      imgh * scale * imgScale
     );
 
-    imgsData.push(context.getImageData(
+    // 每个分拆单元变成图片缓存
+    var imgData = context.getImageData(
       initPositionItem.x,
       initPositionItem.y,
-      imgw * scale,
-      imgh * scale
-    ));
-  }
+      imgw * scale * imgScale,
+      imgh * scale * imgScale
+    );
 
-  nowPositions = JSON.parse(JSON.stringify(initPositions));
+    temp.width = temp.width;
+
+    tempCtx.putImageData(
+      imgData,
+      0,
+      0,
+      0,
+      0,
+      imgw * scale * imgScale,
+      imgh * scale * imgScale
+    );
+
+    var imgSrc = temp.toDataURL('image/png', 0.95);
+    var imgDom = new Image();
+    imgDom.src = imgSrc;
+
+    imgsData.push(imgDom);
+  }
 }
 
 // 动态渲染过程
@@ -116,14 +138,16 @@ function render(target, index) {
     context.clearRect(0, 0, canvas.width, canvas.height);
   }
 
-  context.putImageData(
+  context.drawImage(
     imgsData[index],
+    0,
+    0,
+    imgw * scale * imgScale,
+    imgh * scale * imgScale,
     initPositions[index].x,
     initPositions[index].y,
-    0,
-    0,
-    imgw * initPositions[index].o,
-    imgh * initPositions[index].o
+    imgw * initPositions[index].o, // 此处将会缩放
+    imgh * initPositions[index].o  // 此处将会缩放
   );
 }
 
