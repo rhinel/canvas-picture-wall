@@ -5,7 +5,7 @@
 ``` bash
 # install dependencies
 yarn
-npm run init
+yarn run init
 
 # serve with hot reload at localhost:8000
 anywhere

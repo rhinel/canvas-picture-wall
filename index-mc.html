@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>This is winner take it all</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    #wrap {
+      display: block;
+      margin: 0 auto;
+    }
+    .b-center {
+      text-align: center;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="wrap" height="600" width="600"></canvas>
+  <div class="b-center">
+    <input type="button" onclick="audio.play()" value="播放" />
+    <input type="button" onclick="audio.pause()" value="暂停" />
+  </div>
+  <div class="b-center">
+    <a href="https://www.jianshu.com/p/14f1a5af6dd6">参考[HTML5 Canvas 实现简易 绘制音乐环形频谱图]</a>
+  </div>
+  <script>
+    var wrap = document.getElementById("wrap");
+    var cxt = wrap.getContext("2d");
+    //获取API
+    var AudioContext = AudioContext || webkitAudioContext;
+    var context = new AudioContext;
+    //加载媒体
+    var audio = new Audio("assets/Dr. Dre-I Need A Doctor.mp3");
+    //创建节点
+    var source = context.createMediaElementSource(audio);
+    var analyser = context.createAnalyser();
+    //连接：source → analyser → destination
+    source.connect(analyser);
+    analyser.connect(context.destination);
+    //创建数据
+    var output = new Uint8Array(360);
+
+    (function drawSpectrum() {
+      analyser.getByteFrequencyData(output);
+      cxt.clearRect(0, 0, wrap.width, wrap.height);
+      //画线条
+      for (var i = 0; i < 360; i++) {
+        var value = output[i] / 8;
+        cxt.beginPath();
+        cxt.lineWidth = 2;
+        cxt.moveTo(300, 300);
+        //R * cos (PI/180*一次旋转的角度数) ,-R * sin (PI/180*一次旋转的角度数)
+        cxt.lineTo(
+          Math.cos((i * 1) / 180 * Math.PI) * (200 + value) + 300,
+          (-Math.sin((i * 1) / 180 * Math.PI) * (200 + value) + 300)
+        );
+        cxt.stroke();
+      }
+      //画一个小圆，将线条覆盖
+      cxt.beginPath();
+      cxt.lineWidth = 1;
+      cxt.arc(300, 300, 200, 0, 2 * Math.PI, false);
+      cxt.fillStyle = "#fff";
+      cxt.stroke();
+      cxt.fill();
+
+      requestAnimationFrame(drawSpectrum);
+    })();
+  </script>
+</body>
+</html>
